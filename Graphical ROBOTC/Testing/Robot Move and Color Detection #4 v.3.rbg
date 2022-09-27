@@ -1,0 +1,1033 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RBCVersion>1.0.1</RBCVersion>
+
+<Platform>VEXIQ</Platform>
+
+<CompilerMode>Real</CompilerMode>
+
+<MenuLevel>Basic</MenuLevel>
+
+<CompileAndDownload>NO</CompileAndDownload>
+
+<SourceFileName>NewProgram.c</SourceFileName>
+
+<VEXIQDLMethod>Auto</VEXIQDLMethod>
+
+<NaturalLanguageFlag>True</NaturalLanguageFlag>
+
+<DebuggerWindows></DebuggerWindows>
+
+<SourceCode>&lt;Version&gt;1.0.1&lt;/Version&gt;
+
+&lt;VariableList&gt;
+    &lt;Variable&gt;vari&lt;/Variable&gt;
+&lt;/VariableList&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="resetGyro"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="nDeviceIndex" type="base typedef" typeDef="tSensors"&gt;gyroSensor&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="resetMotorEncoder"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="nMotorIndex" type="base typedef" typeDef="tMotor"&gt;armMotor&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Lift up the arm and claw&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;clawMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;-50&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;armMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;500&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;80&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Begin forward movement at half speed&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Poll for the bump value while moving &amp;amp; stop when true&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="loop" loopType="RepeatUntil"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="LHS" type="typedef"&gt;getBumperValue(bumpSwitch)&lt;/Parameter&gt;
+        &lt;Parameter name="operator" type="typedef"&gt;==&lt;/Parameter&gt;
+        &lt;Parameter name="RHS" type="float"&gt;true&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="forward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;2&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;75&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="end"/&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Move backwards&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" commented="1" function="backward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;.66&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;25&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" commented="1" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;armMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;-499&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;25&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Red detector (red is 0)&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="loop" loopType="IfOnly"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="LHS" type="typedef"&gt;getColorHue(colorDetector)&lt;/Parameter&gt;
+        &lt;Parameter name="operator" type="typedef"&gt;&amp;lt;=&lt;/Parameter&gt;
+        &lt;Parameter name="RHS" type="float"&gt;30&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Move backwards&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="backward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;.66&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;25&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;armMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;-499&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;25&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Set the LED to Red&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="wait"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;2&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="seconds" typeDef="tMovementUnits"&gt;seconds&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="setTouchLEDColor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="nDeviceIndex" type="base typedef" typeDef="tSensors"&gt;touchLED&lt;/Parameter&gt;
+        &lt;Parameter name="nColor" type="base typedef" typeDef="TSimpleColors"&gt;colorRed&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;clawMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;90&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;100&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="forward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;.50&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="backward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;armMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;500&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;25&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="wait"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="seconds" typeDef="tMovementUnits"&gt;seconds&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="turnRight"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;0.70&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Polling for bump sequence&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="loop" loopType="RepeatUntil"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="LHS" type="typedef"&gt;getBumperValue(bumpSwitch)&lt;/Parameter&gt;
+        &lt;Parameter name="operator" type="typedef"&gt;==&lt;/Parameter&gt;
+        &lt;Parameter name="RHS" type="float"&gt;true&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="forward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="end"/&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Move backward 1 rotation&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="backward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1.5&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Manipulate arm and claw motor&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;armMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;-500&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;100&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;clawMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;-100&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;armMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;250&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Move backward 1 rotation&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="backward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;0.75&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;100&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Turning right&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="turnRight"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;0.72&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;100&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Moving forward&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="forward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1.0&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="end"/&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Blue detector (blue is above 100) &lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="loop" loopType="IfOnly"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="LHS" type="typedef"&gt;getColorHue(colorDetector)&lt;/Parameter&gt;
+        &lt;Parameter name="operator" type="typedef"&gt;&amp;gt;=&lt;/Parameter&gt;
+        &lt;Parameter name="RHS" type="short"&gt;100&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="loop" loopType="IfOnly"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="LHS" type="typedef"&gt;getColorHue(colorDetector)&lt;/Parameter&gt;
+        &lt;Parameter name="operator" type="typedef"&gt;&amp;lt;&lt;/Parameter&gt;
+        &lt;Parameter name="RHS" type="short"&gt;180&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Move backwards&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="backward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;.66&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;25&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;armMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;-499&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;25&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Set the LED to Blue&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="wait"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;2&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="seconds" typeDef="tMovementUnits"&gt;seconds&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="setTouchLEDColor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="nDeviceIndex" type="base typedef" typeDef="tSensors"&gt;touchLED&lt;/Parameter&gt;
+        &lt;Parameter name="nColor" type="base typedef" typeDef="TSimpleColors"&gt;colorBlue&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;clawMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;90&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;100&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="forward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;.50&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="backward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;.75&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;armMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;500&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;25&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="wait"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="seconds" typeDef="tMovementUnits"&gt;seconds&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="turnLeft"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;0.70&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Polling for bump sequence&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="loop" loopType="RepeatUntil"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="LHS" type="typedef"&gt;getBumperValue(bumpSwitch)&lt;/Parameter&gt;
+        &lt;Parameter name="operator" type="typedef"&gt;==&lt;/Parameter&gt;
+        &lt;Parameter name="RHS" type="bool" typeDef="bool"&gt;true&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="forward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="end"/&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Move backward 1 rotation&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="backward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1.5&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Manipulate arm and claw motor&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;armMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;-500&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;100&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;clawMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;-100&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;armMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;250&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Move backward 1 rotation&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="backward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;0.75&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Turning right&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="turnLeft"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;0.72&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Moving forward&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="forward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1.0&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="end"/&gt;
+
+&lt;ProgrammingBlock type="end"/&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Other colors&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="loop" loopType="IfOnly"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="LHS" type="typedef"&gt;getColorHue(colorDetector)&lt;/Parameter&gt;
+        &lt;Parameter name="operator" type="typedef"&gt;&amp;gt;&lt;/Parameter&gt;
+        &lt;Parameter name="RHS" type="short"&gt;30&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="loop" loopType="IfOnly"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="LHS" type="typedef"&gt;getColorHue(colorDetector)&lt;/Parameter&gt;
+        &lt;Parameter name="operator" type="typedef"&gt;&amp;lt;&lt;/Parameter&gt;
+        &lt;Parameter name="RHS" type="short"&gt;100&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Move backwards&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="backward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1.00&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;25&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;armMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;-499&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;25&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Set the LED to Green&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="wait"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;2&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="seconds" typeDef="tMovementUnits"&gt;seconds&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="setTouchLEDColor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="nDeviceIndex" type="base typedef" typeDef="tSensors"&gt;touchLED&lt;/Parameter&gt;
+        &lt;Parameter name="nColor" type="base typedef" typeDef="TSimpleColors"&gt;colorGreen&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="backward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;0.75&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;clawMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;90&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;100&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;armMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;500&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;25&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="wait"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="seconds" typeDef="tMovementUnits"&gt;seconds&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="turnRight"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1.5&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Polling for bump sequence&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="loop" loopType="RepeatUntil"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="LHS" type="typedef"&gt;getBumperValue(bumpSwitch)&lt;/Parameter&gt;
+        &lt;Parameter name="operator" type="typedef"&gt;==&lt;/Parameter&gt;
+        &lt;Parameter name="RHS" type="bool" typeDef="bool"&gt;true&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="forward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="end"/&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Move backward 1 rotation&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="backward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1.5&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Manipulate arm and claw motor&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;armMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;-500&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;100&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;clawMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;-100&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;armMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;250&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Move backward 1 rotation&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="backward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;0.70&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;100&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Turning right&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="turnRight"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1.4&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;100&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Moving forward&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="forward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;0.50&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="end"/&gt;
+
+&lt;ProgrammingBlock type="end"/&gt;
+
+&lt;ProgrammingBlock type="loop" loopType="IfOnly"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="LHS" type="typedef"&gt;getColorHue(colorDetector)&lt;/Parameter&gt;
+        &lt;Parameter name="operator" type="typedef"&gt;&amp;gt;&lt;/Parameter&gt;
+        &lt;Parameter name="RHS" type="short"&gt;180&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Move backwards&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="backward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;.66&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;25&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;armMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;-499&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;25&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Set the LED to Green&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="wait"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;2&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="seconds" typeDef="tMovementUnits"&gt;seconds&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="setTouchLEDColor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="nDeviceIndex" type="base typedef" typeDef="tSensors"&gt;touchLED&lt;/Parameter&gt;
+        &lt;Parameter name="nColor" type="base typedef" typeDef="TSimpleColors"&gt;colorGreen&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;clawMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;90&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;100&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="forward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;.50&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="backward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;armMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;500&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;25&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="wait"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="seconds" typeDef="tMovementUnits"&gt;seconds&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="turnRight"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;0.70&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Polling for bump sequence&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="loop" loopType="RepeatUntil"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="LHS" type="typedef"&gt;getBumperValue(bumpSwitch)&lt;/Parameter&gt;
+        &lt;Parameter name="operator" type="typedef"&gt;==&lt;/Parameter&gt;
+        &lt;Parameter name="RHS" type="bool" typeDef="bool"&gt;true&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="forward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="end"/&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Move backward 4 rotations&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="backward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;4.0&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Turning right&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="turnRight"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1.00&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;100&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Manipulate arm and claw motor&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;armMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;-500&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;100&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;clawMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;-100&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="moveMotor"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="motorPort" type="base typedef" default="motor10" typeDef="tMotor"&gt;armMotor&lt;/Parameter&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;250&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;degrees&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Turning right&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="turnRight"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1.00&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;100&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Moving forward&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="forward"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="quantity" type="float" default="1"&gt;1.0&lt;/Parameter&gt;
+        &lt;Parameter name="unitType" type="base typedef" default="rotations" typeDef="tMovementUnits"&gt;rotations&lt;/Parameter&gt;
+        &lt;Parameter name="speed" type="short" default="50"&gt;50&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="end"/&gt;
+
+&lt;ProgrammingBlock type="comment"&gt;Play sound&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="playSound"&gt;
+    &lt;Parameters&gt;
+        &lt;Parameter name="sound" type="base typedef" typeDef="TSounds"&gt;soundTada&lt;/Parameter&gt;
+    &lt;/Parameters&gt;
+&lt;/ProgrammingBlock&gt;
+
+&lt;ProgrammingBlock type="functionCall" function="stopAllMotors"/&gt;
+
+&lt;RobotConfiguration&gt;#pragma config(Sensor, port2,  touchLED,       sensorVexIQ_LED)
+#pragma config(Sensor, port3,  colorDetector,  sensorVexIQ_ColorHue)
+#pragma config(Sensor, port4,  gyroSensor,     sensorVexIQ_Gyro)
+#pragma config(Sensor, port7,  distanceMM,     sensorVexIQ_Distance)
+#pragma config(Sensor, port8,  bumpSwitch,     sensorVexIQ_Touch)
+#pragma config(Motor,  motor1,          leftMotor,     tmotorVexIQ, openLoop, driveLeft, encoder)
+#pragma config(Motor,  motor6,          rightMotor,    tmotorVexIQ, openLoop, reversed, driveRight, encoder)
+#pragma config(Motor,  motor10,         armMotor,      tmotorVexIQ, openLoop, encoder)
+#pragma config(Motor,  motor11,         clawMotor,     tmotorVexIQ, openLoop, encoder)
+//*!!Code automatically generated by 'ROBOTC' configuration wizard               !!*//
+&lt;/RobotConfiguration&gt;
+
+&lt;CSource&gt;#pragma config(Sensor, port2,  touchLED,       sensorVexIQ_LED)
+#pragma config(Sensor, port3,  colorDetector,  sensorVexIQ_ColorHue)
+#pragma config(Sensor, port4,  gyroSensor,     sensorVexIQ_Gyro)
+#pragma config(Sensor, port7,  distanceMM,     sensorVexIQ_Distance)
+#pragma config(Sensor, port8,  bumpSwitch,     sensorVexIQ_Touch)
+#pragma config(Motor,  motor1,          leftMotor,     tmotorVexIQ, openLoop, driveLeft, encoder)
+#pragma config(Motor,  motor6,          rightMotor,    tmotorVexIQ, openLoop, reversed, driveRight, encoder)
+#pragma config(Motor,  motor10,         armMotor,      tmotorVexIQ, openLoop, encoder)
+#pragma config(Motor,  motor11,         clawMotor,     tmotorVexIQ, openLoop, encoder)
+//*!!Code automatically generated by 'ROBOTC' configuration wizard               !!*//
+
+
+float vari;
+
+
+task main()
+{
+	resetGyro(gyroSensor);
+	resetMotorEncoder(armMotor);
+	// Lift up the arm and claw
+	moveMotor(clawMotor, -50, degrees, 50);
+	moveMotor(armMotor, 500, degrees, 80);
+	// Begin forward movement at half speed
+	// Poll for the bump value while moving &amp;amp; stop when true
+	repeatUntil (getBumperValue(bumpSwitch) == true) {
+		forward(2, rotations, 75);
+	}
+	// Move backwards
+	//backward(.66, rotations, 25);
+	//moveMotor(armMotor, -499, degrees, 25);
+	// Red detector (red is 0)
+	if (getColorHue(colorDetector) &amp;lt;= 30) {
+		// Move backwards
+		backward(.66, rotations, 25);
+		moveMotor(armMotor, -499, degrees, 25);
+		// Set the LED to Red
+		wait(2, seconds);
+		setTouchLEDColor(touchLED, colorRed);
+		moveMotor(clawMotor, 90, degrees, 100);
+		forward(.50, rotations, 50);
+		backward(1, rotations, 50);
+		moveMotor(armMotor, 500, degrees, 25);
+		wait(1, seconds);
+		turnRight(0.70, rotations, 50);
+		// Polling for bump sequence
+		repeatUntil (getBumperValue(bumpSwitch) == true) {
+			forward(1, rotations, 50);
+		}
+		// Move backward 1 rotation
+		backward(1.5, rotations, 50);
+		// Manipulate arm and claw motor
+		moveMotor(armMotor, -500, degrees, 100);
+		moveMotor(clawMotor, -100, degrees, 50);
+		moveMotor(armMotor, 250, degrees, 50);
+		// Move backward 1 rotation
+		backward(0.75, rotations, 100);
+		// Turning right
+		turnRight(0.72, rotations, 100);
+		// Moving forward
+		forward(1.0, rotations, 50);
+	}
+	// Blue detector (blue is above 100)
+	if (getColorHue(colorDetector) &amp;gt;= 100) {
+		if (getColorHue(colorDetector) &amp;lt; 180) {
+			// Move backwards
+			backward(.66, rotations, 25);
+			moveMotor(armMotor, -499, degrees, 25);
+			// Set the LED to Blue
+			wait(2, seconds);
+			setTouchLEDColor(touchLED, colorBlue);
+			moveMotor(clawMotor, 90, degrees, 100);
+			forward(.50, rotations, 50);
+			backward(.75, rotations, 50);
+			moveMotor(armMotor, 500, degrees, 25);
+			wait(1, seconds);
+			turnLeft(0.70, rotations, 50);
+			// Polling for bump sequence
+			repeatUntil (getBumperValue(bumpSwitch) == true) {
+				forward(1, rotations, 50);
+			}
+			// Move backward 1 rotation
+			backward(1.5, rotations, 50);
+			// Manipulate arm and claw motor
+			moveMotor(armMotor, -500, degrees, 100);
+			moveMotor(clawMotor, -100, degrees, 50);
+			moveMotor(armMotor, 250, degrees, 50);
+			// Move backward 1 rotation
+			backward(0.75, rotations, 50);
+			// Turning right
+			turnLeft(0.72, rotations, 50);
+			// Moving forward
+			forward(1.0, rotations, 50);
+		}
+	}
+	// Other colors
+	if (getColorHue(colorDetector) &amp;gt; 30) {
+		if (getColorHue(colorDetector) &amp;lt; 100) {
+			// Move backwards
+			backward(1.00, rotations, 25);
+			moveMotor(armMotor, -499, degrees, 25);
+			// Set the LED to Green
+			wait(2, seconds);
+			setTouchLEDColor(touchLED, colorGreen);
+			backward(0.75, rotations, 50);
+			moveMotor(clawMotor, 90, degrees, 100);
+			moveMotor(armMotor, 500, degrees, 25);
+			wait(1, seconds);
+			turnRight(1.5, rotations, 50);
+			// Polling for bump sequence
+			repeatUntil (getBumperValue(bumpSwitch) == true) {
+				forward(1, rotations, 50);
+			}
+			// Move backward 1 rotation
+			backward(1.5, rotations, 50);
+			// Manipulate arm and claw motor
+			moveMotor(armMotor, -500, degrees, 100);
+			moveMotor(clawMotor, -100, degrees, 50);
+			moveMotor(armMotor, 250, degrees, 50);
+			// Move backward 1 rotation
+			backward(0.70, rotations, 100);
+			// Turning right
+			turnRight(1.4, rotations, 100);
+			// Moving forward
+			forward(0.50, rotations, 50);
+		}
+	}
+	if (getColorHue(colorDetector) &amp;gt; 180) {
+		// Move backwards
+		backward(.66, rotations, 25);
+		moveMotor(armMotor, -499, degrees, 25);
+		// Set the LED to Green
+		wait(2, seconds);
+		setTouchLEDColor(touchLED, colorGreen);
+		moveMotor(clawMotor, 90, degrees, 100);
+		forward(.50, rotations, 50);
+		backward(1, rotations, 50);
+		moveMotor(armMotor, 500, degrees, 25);
+		wait(1, seconds);
+		turnRight(0.70, rotations, 50);
+		// Polling for bump sequence
+		repeatUntil (getBumperValue(bumpSwitch) == true) {
+			forward(1, rotations, 50);
+		}
+		// Move backward 4 rotations
+		backward(4.0, rotations, 50);
+		// Turning right
+		turnRight(1.00, rotations, 100);
+		// Manipulate arm and claw motor
+		moveMotor(armMotor, -500, degrees, 100);
+		moveMotor(clawMotor, -100, degrees, 50);
+		moveMotor(armMotor, 250, degrees, 50);
+		// Turning right
+		turnRight(1.00, rotations, 100);
+		// Moving forward
+		forward(1.0, rotations, 50);
+	}
+	// Play sound
+	playSound(soundTada);
+	stopAllMotors();
+}
+&lt;/CSource&gt;
+
+</SourceCode>
